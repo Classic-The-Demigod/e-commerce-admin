@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendUrl } from "../App";
+import { toast } from "react-toastify";
 
 const Add = ({ token }) => {
   const [image1, setImage1] = useState(false);
@@ -41,8 +42,24 @@ const Add = ({ token }) => {
         { headers: {token} }
       );
 
-      console.log(response.data);
-    } catch (error) {}
+      if (response.data.success) {
+        toast.success(response.data.message)
+        setName("")
+        setDescription("")
+        setImage1(false)
+        setImage2(false)
+        setImage3(false)
+        setImage4(false)
+        setPrice("")
+        setSizes([])
+      } else {
+        toast.error(response.data.message)
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message)
+      
+    }
   };
 
   return (
@@ -54,7 +71,7 @@ const Add = ({ token }) => {
         <p className="mb-2">Upload Image</p>
 
         <div className="flex items-center gap-2">
-          <label htmlFor="image1">
+          <label htmlFor="image1" className="cursor-pointer">
             <img
               className="w-20"
               src={!image1 ? assets.upload_area : URL.createObjectURL(image1)}
@@ -66,7 +83,7 @@ const Add = ({ token }) => {
               hidden
             />
           </label>
-          <label htmlFor="image2">
+          <label htmlFor="image2" className="cursor-pointer">
             <img
               className="w-20"
               src={!image2 ? assets.upload_area : URL.createObjectURL(image2)}
@@ -78,7 +95,7 @@ const Add = ({ token }) => {
               hidden
             />
           </label>
-          <label htmlFor="image3">
+          <label htmlFor="image3" className="cursor-pointer">
             <img
               className="w-20"
               src={!image3 ? assets.upload_area : URL.createObjectURL(image3)}
@@ -90,7 +107,7 @@ const Add = ({ token }) => {
               hidden
             />
           </label>
-          <label htmlFor="image4">
+          <label htmlFor="image4" className="cursor-pointer">
             <img
               className="w-20"
               src={!image4 ? assets.upload_area : URL.createObjectURL(image4)}
